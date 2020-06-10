@@ -4,10 +4,13 @@ path = require("path");
 app = express();
 const PORT = 8080;
 
-app;
-// GET `/notes` - Should return the `notes.html` file.
-app.get("/notes.html", (req, res) => {
-  res.sendFile(path.join(__dirname, "assets"));
+// make static folder
+// brings us to public
+app.use(express.static(path.join(__dirname, "..", "..")));
+// this makes it so if we use localhost:8080/nameoffile.filetype it brings us there!
+// now if we just use /notes
+app.get("/notes", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "..", "notes.html"));
 });
 // GET `*` - Should return the `index.html` file
 
