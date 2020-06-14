@@ -3,7 +3,7 @@ express = require("express");
 path = require("path");
 app = express();
 fs = require("fs");
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 
 // make static folder
 // brings us to public
@@ -19,7 +19,9 @@ app.get("*", (req, res) => {
 });
 // listener
 app.listen(PORT, () => console.log(`Server started on ${PORT}`));
-
+//middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 // * GET `/api/notes` - Should read the `db.json` file and return all saved notes as JSON.
 app.get("/api/notes", (req, res) => {
   const readNotes = fs.readFile(
@@ -33,7 +35,7 @@ app.get("/api/notes", (req, res) => {
     }
   );
   // not sure if this is how you send it or not
-  res.readNotes;
+  res.json(readNotes);
   // res.sendFile(path.join(__dirname, "..", "..", "..", "db", "db.json"));
 });
 
@@ -41,7 +43,7 @@ app.get("/api/notes", (req, res) => {
 app.post("/api/notes", (req, res) => {
   fs.appendFile(
     path.join(__dirname, "..", "..", "db", "db.json"),
-    req,
+    req.body,
     (err) => {
       if (err) {
         throw err;
